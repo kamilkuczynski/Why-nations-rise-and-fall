@@ -18,4 +18,5 @@ tables = soup.find_all('table', {'class': 'wikitable'})
 
 for i, table in enumerate(tables):
     df = pd.read_html(str(table))[0]
+    print(f"Table {i + 1} has {df.duplicated().sum()} duplicate rows")
     df.to_csv(f'gdp_per_capita_{i}.csv', index=True, quoting=csv.QUOTE_NONNUMERIC)
