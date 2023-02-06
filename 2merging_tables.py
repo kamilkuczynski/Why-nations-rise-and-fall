@@ -27,4 +27,6 @@ print(merged_df.head(10))
 
 
 #saving tables to one table
-merged_df.to_csv('merged_beautiful_gdp_per_capita.csv', index=True)
+merged_df.to_csv('merged_beautiful_gdp_per_capita.csv', index=True, sep=',')
+
+#I will not continue with these tables because GDP per capita is in current prices, so it cannot accurately compare the changes in GDP per capita year to year.
