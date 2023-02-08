@@ -1,4 +1,42 @@
 import pandas as pd
+from matplotlib import pyplot as plt
+import matplotlib.ticker as mtick
+import numpy as np
+
+
+def create_bar_chart(df, n, title, value_column):
+    # get the first n rows of the dataframe
+    df_first_n = df.head(n)
+    df_first_n = df_first_n.sort_values(value_column, ascending=True)
+
+    # plot the bar chart
+    fig, ax = plt.subplots(figsize=(18, 7.5))
+
+    # add bars
+    bars = plt.barh(df_first_n['Country'], df_first_n[value_column], color="grey")
+    bars[-1].set_color('black')  # Change color of the first bar
+
+    # set y-axis
+    plt.gca().set_yticklabels(df_first_n["Country"])
+
+    # add title to a bar
+    plt.title(title, fontsize=24, y=1.05)
+
+    # rectangle first
+    plt.gca().add_patch(
+        plt.Rectangle(
+            (-0.05, .95),  # location
+            0.0125,  # width
+            -0.13,  # height
+            facecolor='tab:red',
+            transform=fig.transFigure,
+            clip_on=False,
+            linewidth=0
+        )
+    )
+
+    plt.show()
+
 
 file_name = "C:/Users/kuczy/Documents/GitHub/Why-nations-rise-and-fall/gdp_per_capita_ppp_constant_2017.csv"
 
@@ -9,7 +47,7 @@ df.rename(columns={df.columns[0]: "Country"}, inplace= True)
 duplicate_rows = df.duplicated()
 print(f"This data contains {duplicate_rows.sum()} duplicated rows.\n")
 
-print("Checking how many rows are there in the dataset?")
+print("Checking how many rows are   there in the dataset?")
 #print(len(df), '\n')
 
 print("\n Find the missing values for all columns. \n")
@@ -58,23 +96,33 @@ df["1990"].bfill(inplace=True)
 df['Growth'] = round(df["2021"]/df["1990"] - 1, 2)
 
 # Sort values of the dataframe based on column 'Growth' in descending order
-df.sort_values(by='Growth', ascending=False, inplace=True)
+top_10 = df.sort_values(by='Growth', ascending=False, inplace=True)
+print(top_10)
+
 # Print 5 random rows from the sorted dataframe
-print(df.sample(5))
+#print(df.sample(5))
+
+
+#plot a bar chrt for top 10 exonomies:
+create_bar_chart(df=df, n=10, title="Top 10 best growing countries", value_column="Growth")
 
 # Load the 'area.csv' file and skip first 4 rows
 file_area = "area.csv"
 df_area = pd.read_csv(file_area, skiprows=4, encoding='UTF-8')
+
 # Print the loaded dataframe
-print(df_area)
+#print(df_area)
 
 # Rename the column '2020' to 'Area' in the dataframe 'df_area'
 df_area.rename(columns={"2020" : "Area"}, inplace=True)
 # Print the modified dataframe
-print(df_area)
+#print(df_area)
+
 
 # Merge the dataframes 'df' and 'df_area' on the common column 'Country Code'
+
 # with the type of merge being 'left'
 df = df.merge(df_area[["Country Code", 'Area']], on='Country Code', how='left')
+
 # Save the merged dataframe to a csv file
 df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by-area.csv", index=False)
