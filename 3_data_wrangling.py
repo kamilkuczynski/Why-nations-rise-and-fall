@@ -57,5 +57,24 @@ df["1990"].bfill(inplace=True)
 #add column with growth from 1990 to 20221
 df['Growth'] = round(df["2021"]/df["1990"] - 1, 2)
 
-#checking the score
-print(df[['Country','1990', '2021', 'Growth']].head(100))
+# Sort values of the dataframe based on column 'Growth' in descending order
+df.sort_values(by='Growth', ascending=False, inplace=True)
+# Print 5 random rows from the sorted dataframe
+print(df.sample(5))
+
+# Load the 'area.csv' file and skip first 4 rows
+file_area = "area.csv"
+df_area = pd.read_csv(file_area, skiprows=4, encoding='UTF-8')
+# Print the loaded dataframe
+print(df_area)
+
+# Rename the column '2020' to 'Area' in the dataframe 'df_area'
+df_area.rename(columns={"2020" : "Area"}, inplace=True)
+# Print the modified dataframe
+print(df_area)
+
+# Merge the dataframes 'df' and 'df_area' on the common column 'Country Code'
+# with the type of merge being 'left'
+df = df.merge(df_area[["Country Code", 'Area']], on='Country Code', how='left')
+# Save the merged dataframe to a csv file
+df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by-area.csv", index=False)
