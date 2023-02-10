@@ -2,6 +2,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
+from tabulate import tabulate
 
 
 def create_bar_chart(df, n, title, value_column):
@@ -90,9 +91,12 @@ df.to_csv("gdp_per_capita_ppp_constant_2017_modified.csv", index=False)
 
 print("Count growth of all countries from 1990 to 2021 \n")
 #fullfill empty series in column 1990 with .bfill() method, which fills missing values with the next non-null value in the column
-df["1990"].bfill(inplace=True)
+df = df.bfill( axis= 1)
 
+#print(tabulate(df, headers='keys'))
 #add column with growth from 1990 to 20221
+df['2021'] = df['2021'].astype(float)
+df['1990'] = df['1990'].astype(float)
 df['Growth'] = round(df["2021"]/df["1990"] - 1, 2)
 
 # Sort values of the dataframe based on column 'Growth' in descending order
@@ -104,7 +108,7 @@ print(top_10)
 
 
 #plot a bar chrt for top 10 exonomies:
-create_bar_chart(df=df, n=10, title="Top 10 best growing countries", value_column="Growth")
+#create_bar_chart(df=df, n=31, title="Top 10 best growing countries", value_column="Growth")
 
 # Load the 'area.csv' file and skip first 4 rows
 file_area = "area.csv"
@@ -119,10 +123,14 @@ df_area.rename(columns={"2020" : "Area"}, inplace=True)
 #print(df_area)
 
 
-# Merge the dataframes 'df' and 'df_area' on the common column 'Country Code'
+print('Merge the dataframes \'df\' and \'df_area\' on the common column \'Country Code\'')
 
 # with the type of merge being 'left'
 df = df.merge(df_area[["Country Code", 'Area']], on='Country Code', how='left')
 
+
 # Save the merged dataframe to a csv file
 df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by-area.csv", index=False)
+
+
+#print(tabulate(df, headers="keys"))
