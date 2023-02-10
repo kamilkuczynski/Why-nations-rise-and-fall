@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 from tabulate import tabulate
+import seaborn as sns
 
 
 def create_bar_chart(df, n, title, value_column):
@@ -135,11 +136,37 @@ print(df.dtypes)
 df['Area'] = df['Area'].astype(str).str.replace(',', '.').astype(float)
 
 # Check if column type has changed
-print(df['Area'].dtypes)
-
-
+#print(df['Area'].dtypes)
 # Save the merged dataframe to a csv file
-df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by-area.csv", index=False)
+df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by_area.csv", index=True)
 
+# Create scatter plot of "Growth" and "Area"
+sns.regplot(x="Area", y="Growth", data=df)
+plt.ylim(0,)
+#plt.show()
 
-#print(tabulate(df, headers="keys"))
+# Check correlation between Growth of country and its size
+print(df[["Growth", "Area"]].corr())
+
+'''
+CONCLUSION: Area does not seem like a good predictor of the growth at all since the regression line is 
+close to horizontal. 
+Also, the data points are very scattered and far from the fitted line, showing lots of variability. 
+Therefore, it's not a reliable variable.
+It make sense. Russia, Brasil and China are huge and poor. Canada, USA and Australia are also huge and rich.
+'''
+
+# Check corelation between population size and economic growth
+
+df_population = pd.read_csv("population.csv", encoding='UTF-8')
+
+# checking an average size of population for every country from 1990 to 2021 year and adding it to new created column called population
+
+#df_population.iloc[:, 34:65] = df_population.iloc[:, 34:65].astype(float)
+
+#df_population["Population"] = df_population.iloc[:, 34:65].mean(axis=1)
+df_population["Population"] = df_population[["2020", "2021"]][0:264].mean(axis=1)
+
+#print(df_population.dtypes)
+#print(tabulate(df_population, headers="keys"))
+print(df_population)
