@@ -128,6 +128,15 @@ print('Merge the dataframes \'df\' and \'df_area\' on the common column \'Countr
 # with the type of merge being 'left'
 df = df.merge(df_area[["Country Code", 'Area']], on='Country Code', how='left')
 
+# Check data type of column and column "Area"
+print(df.dtypes)
+
+# Change ',' to '.' to convert column "Area" to float to perform mathematical operations on it
+df['Area'] = df['Area'].astype(str).str.replace(',', '.').astype(float)
+
+# Check if column type has changed
+print(df['Area'].dtypes)
+
 
 # Save the merged dataframe to a csv file
 df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by-area.csv", index=False)
