@@ -155,7 +155,7 @@ df_population["Population"] = df_population.iloc[:, 34:65].mean(axis=1)
 
 # float_format is set to a function that formats floating point numbers with a comma as a thousands separator,
 # and with no decimal places to read more comfortable data
-pd.options.display.float_format = '{:,.0f}'.format
+pd.options.display.float_format = '{:,.2f}'.format
 
 # with the type of merge being 'left'
 df = df.merge(df_population[["Country Code", 'Population']], on='Country Code', how='left')
@@ -175,14 +175,55 @@ plt.ylim(0,)
 Conclusion: The results of the regression analysis indicate that population does not have a strong correlation with growth. The regression line is close to horizontal, indicating a weak relationship between the two variables. Furthermore, the data points are widely dispersed from the fitted line, showing a significant amount of variability. These findings suggest that population is not a reliable predictor of growth.
 It is important to note that while the relationship between population and growth may be weak in general, there may be exceptions in specific countries. For example, in countries such as India, Brazil, Egypt, and China, despite having large populations, they are considered to be relatively poor. On the other hand, in wealthy countries such as the United States and Japan, there are also large populations. This highlights the complexity of the relationship between population and growth and the need for further analysis to fully understand it.
 '''
+
+
 # Check corelation between economy freedom  and economic growth
 # New table new challange
 
+# Load the data into a pandas DataFrame and calculate the mean of the 'Summary Index' column for each country in one line
 
+# Import the data from the csv file into a pandas dataframe
+df_economy_freedom = pd.read_csv("economicdata1990-2020.csv")
+
+# Convert the "Economic Freedom Summary Index" column to a numerical type by first removing the commas and then converting to a float.
+df_economy_freedom['Economic Freedom Summary Index'] = df_economy_freedom['Economic Freedom Summary Index'].str.replace(',', '.')
+df_economy_freedom['Economic Freedom Summary Index'] = pd.to_numeric(df_economy_freedom['Economic Freedom Summary Index'])
+
+# Print the column names of the dataframe to verify the conversion was successful.
+#print(df_economy_freedom.columns)
+
+# Calculate the mean of the "Economic Freedom Summary Index" column for each unique "ISO_Code".
+mean = df_economy_freedom.groupby("ISO_Code")["Economic Freedom Summary Index"].mean()
+
+# Reset the index of the mean dataframe to make the "ISO_Code" column a regular column.
+mean = mean.reset_index()
+
+# Rename the "ISO_Code" column to "Country Code".
+mean = mean.rename(columns={'ISO_Code': 'Country Code'})
+
+# Print the mean dataframe to verify the changes were successful.
+#print(mean)
+
+# Merge the mean dataframe with the main dataframe on the "Country Code" column.
+df = df.merge(mean.reset_index(), how="left", on="Country Code")
+
+# Rename the "Economic Freedom Summary Index" column to "Average Economic Freedom".
+df = df.rename(columns={"Economic Freedom Summary Index": "Average Economic Freedom"})
+
+# Calculate the correlation between the "Growth" and "Average Economic Freedom" columns.
+correlation_with_economic_freedom = df[["Growth","Average Economic Freedom"]].corr()
+
+# Print the correlation results.
+print(correlation_with_economic_freedom)
+
+# Print the final dataframe.
 #print(df)
-#print(tabulate(df, headers="keys"))
+
+#print(tabulate(df_economy_freedom, headers="keys"))
 
 #save df to csv
 df.to_csv("gdp_per_capita_ppp_constant_2017_modified.csv", index=False)
+
+
 
 
