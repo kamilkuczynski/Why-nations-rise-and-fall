@@ -86,10 +86,6 @@ df_2020_2021 = df.loc[:, ["Country", "2020", "2021"]] #checking data
 cols = [str(year) for year in range(1990, 2022)]
 df[cols] = df[cols].apply(lambda x: x.str.replace(',', '.')).astype(float)
 
-
-#save df to csv
-df.to_csv("gdp_per_capita_ppp_constant_2017_modified.csv", index=False)
-
 print("Count growth of all countries from 1990 to 2021 \n")
 #fullfill empty series in column 1990 with .bfill() method, which fills missing values with the next non-null value in the column
 df = df.bfill( axis= 1)
@@ -123,22 +119,19 @@ df_area.rename(columns={"2020" : "Area"}, inplace=True)
 # Print the modified dataframe
 #print(df_area)
 
-
 print('Merge the dataframes \'df\' and \'df_area\' on the common column \'Country Code\'')
 
 # with the type of merge being 'left'
 df = df.merge(df_area[["Country Code", 'Area']], on='Country Code', how='left')
 
 # Check data type of column and column "Area"
-print(df.dtypes)
+#print(df.dtypes)
 
 # Change ',' to '.' to convert column "Area" to float to perform mathematical operations on it
 df['Area'] = df['Area'].astype(str).str.replace(',', '.').astype(float)
 
 # Check if column type has changed
 #print(df['Area'].dtypes)
-# Save the merged dataframe to a csv file
-df.to_csv("gdp_per_capita_ppp_constant_2017_modified_by_area.csv", index=True)
 
 # Create scatter plot of "Growth" and "Area"
 sns.regplot(x="Area", y="Growth", data=df)
@@ -149,24 +142,47 @@ plt.ylim(0,)
 print(df[["Growth", "Area"]].corr())
 
 '''
-CONCLUSION: Area does not seem like a good predictor of the growth at all since the regression line is 
-close to horizontal. 
-Also, the data points are very scattered and far from the fitted line, showing lots of variability. 
-Therefore, it's not a reliable variable.
-It make sense. Russia, Brasil and China are huge and poor. Canada, USA and Australia are also huge and rich.
+Conclusion: The regression analysis suggests that the area of a country is not a strong predictor of its growth. The regression line is close to horizontal, indicating a weak relationship between the two variables. Additionally, the data points are widely dispersed and far from the fitted line, demonstrating a high degree of variability. These findings suggest that area is not a reliable variable for predicting growth.
+It is worth noting that while the relationship between area and growth may be weak overall, there may be exceptions in specific countries. For instance, large countries such as Russia, Brazil, and China are relatively poor, while other large countries such as Canada, the United States, and Australia are wealthy. This highlights the complexity of the relationship between area and growth and the need for further examination to better understand it.
 '''
 
 # Check corelation between population size and economic growth
-
 df_population = pd.read_csv("population.csv", encoding='UTF-8')
 
-# checking an average size of population for every country from 1990 to 2021 year and adding it to new created column called population
+# checking an average size of population for every country from 1990 to 2021 year and adding
+# it to new created column called population
+df_population["Population"] = df_population.iloc[:, 34:65].mean(axis=1)
 
-#df_population.iloc[:, 34:65] = df_population.iloc[:, 34:65].astype(float)
+# float_format is set to a function that formats floating point numbers with a comma as a thousands separator,
+# and with no decimal places to read more comfortable data
+pd.options.display.float_format = '{:,.0f}'.format
 
-#df_population["Population"] = df_population.iloc[:, 34:65].mean(axis=1)
-df_population["Population"] = df_population[["2020", "2021"]][0:264].mean(axis=1)
+# with the type of merge being 'left'
+df = df.merge(df_population[["Country Code", 'Population']], on='Country Code', how='left')
 
-#print(df_population.dtypes)
-#print(tabulate(df_population, headers="keys"))
-print(df_population)
+# Check data type of column and column "Population"
+#print(df.dtypes)
+
+# Check correlation between Growth of country and its size of Population
+print(df[["Growth", "Population"]].corr())
+
+# Create scatter plot of "Growth" and "Population"
+sns.regplot(x="Population", y="Growth", data=df)
+plt.ylim(0,)
+#plt.show()
+
+'''
+Conclusion: The results of the regression analysis indicate that population does not have a strong correlation with growth. The regression line is close to horizontal, indicating a weak relationship between the two variables. Furthermore, the data points are widely dispersed from the fitted line, showing a significant amount of variability. These findings suggest that population is not a reliable predictor of growth.
+It is important to note that while the relationship between population and growth may be weak in general, there may be exceptions in specific countries. For example, in countries such as India, Brazil, Egypt, and China, despite having large populations, they are considered to be relatively poor. On the other hand, in wealthy countries such as the United States and Japan, there are also large populations. This highlights the complexity of the relationship between population and growth and the need for further analysis to fully understand it.
+'''
+# Check corelation between economy freedom  and economic growth
+# New table new challange
+
+
+#print(df)
+#print(tabulate(df, headers="keys"))
+
+#save df to csv
+df.to_csv("gdp_per_capita_ppp_constant_2017_modified.csv", index=False)
+
+
