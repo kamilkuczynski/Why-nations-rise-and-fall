@@ -142,14 +142,13 @@ sns.regplot(x="Area", y="Growth", data=df)
 plt.ylim(0,)
 #plt.show()
 
-# Check correlation between Growth of country and its size
+# Check correlation between Growth of country and its size and P-value of Growth and Area to know the significant of the correlation estimate:
 print(df[["Growth", "Area"]].corr())
 
-#Let's calculate the Pearson Correlation Coefficient and P-value of Growth and Area to know the significant of the correlation estimate:
 df_clean= df.dropna(subset=['Area']) # removing countries with nan value in Area column
 
-#print(tabulate(df_clean, headers="keys"))
 pearson_coef, p_value = stats.pearsonr(df_clean['Area'], df_clean['Growth'])
+
 print("\nThe Pearson Correlation Coefficient is", round(pearson_coef, 3), " with a P-value of P =", round(p_value, 4))
 
 '''
