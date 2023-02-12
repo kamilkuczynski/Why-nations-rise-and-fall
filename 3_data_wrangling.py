@@ -143,18 +143,18 @@ plt.ylim(0,)
 #plt.show()
 
 # Check correlation between Growth of country and its size and P-value of Growth and Area to know the significant of the correlation estimate:
-print(df[["Growth", "Area"]].corr())
+print('\n', df[["Growth", "Area"]].corr())
 
 df_clean= df.dropna(subset=['Area']) # removing countries with nan value in Area column
 
 pearson_coef, p_value = stats.pearsonr(df_clean['Area'], df_clean['Growth'])
 
-print("\nThe Pearson Correlation Coefficient is", round(pearson_coef, 3), " with a P-value of P =", round(p_value, 4))
+print("The Pearson Correlation Coefficient is", round(pearson_coef, 3), " with a P-value of P =", round(p_value, 4))
 
 '''
 Based on the code, the Pearson Correlation Coefficient between the Growth and Area columns is 0.055. 
-The P-value, which is the probability of observing a correlation as strong as the one computed from
-the sample, is 0.3995074419116786. Given the P-value is greater than 0.05, we can conclude that there is no statistically significant correlation between Growth and Area.
+The P-value, which is the probability of observing a correlation as strong as the one computed from the sample, is 0.3995074419116786. 
+Given the P-value is greater than 0.05, we can conclude that there is no statistically significant correlation between Growth and Area.
 '''
 
 # Check corelation between population size and economic growth
@@ -171,7 +171,11 @@ df = df.merge(df_population[["Country Code", 'Population']], on='Country Code', 
 #print(df.dtypes)
 
 # Check correlation between Growth of country and its size of Population
-print(df[["Growth", "Population"]].corr())
+print("\n", df[["Growth", "Population"]].corr())
+
+pearson_coef, p_value = stats.pearsonr(df['Population'], df['Growth'])
+
+print("The Pearson Correlation Coefficient is", round(pearson_coef, 3), " with a P-value of P =", round(p_value, 4), '\n')
 
 # Create scatter plot of "Growth" and "Population"
 sns.regplot(x="Population", y="Growth", data=df)
@@ -179,8 +183,13 @@ plt.ylim(0,)
 #plt.show()
 
 '''
-Conclusion: The results of the regression analysis indicate that population does not have a strong correlation with growth. The regression line is close to horizontal, indicating a weak relationship between the two variables. Furthermore, the data points are widely dispersed from the fitted line, showing a significant amount of variability. These findings suggest that population is not a reliable predictor of growth.
-It is important to note that while the relationship between population and growth may be weak in general, there may be exceptions in specific countries. For example, in countries such as India, Brazil, Egypt, and China, despite having large populations, they are considered to be relatively poor. On the other hand, in wealthy countries such as the United States and Japan, there are also large populations. This highlights the complexity of the relationship between population and growth and the need for further analysis to fully understand it.
+Conclusion: 
+Based on the result of the Pearson Correlation Coefficient being 0.156 and the P-value being 0.0153, there is weak evidence that the correlation is significant.
+The results of the regression analysis also indicate that population does not have a strong correlation with growth. 
+The regression line is close to horizontal, indicating a weak relationship between the two variables. 
+Furthermore, the data points are widely dispersed from the fitted line, showing a significant amount of variability. 
+These findings suggest that population is not a reliable predictor of growth.
+For example, in countries such as India, Brazil, Egypt, and China, despite having large populations, they are considered to be relatively poor. On the other hand, in wealthy countries such as the United States and Japan, there are also large populations. This highlights the complexity of the relationship between population and growth and the need for further analysis to fully understand it.
 '''
 
 
@@ -219,9 +228,16 @@ df = df.rename(columns={"Economic Freedom Summary Index": "Average Economic Free
 
 # Calculate the correlation between the "Growth" and "Average Economic Freedom" columns.
 correlation_with_economic_freedom = df[["Growth","Average Economic Freedom"]].corr()
-
 # Print the correlation results.
-print(correlation_with_economic_freedom)
+print('\n', correlation_with_economic_freedom)
+
+df_clean = df.dropna(subset=['Average Economic Freedom']) # removing countries with nan value in Average Economic Freedom column
+
+pearson_coef, p_value = stats.pearsonr(df_clean['Average Economic Freedom'], df_clean['Growth'])
+
+print("The Pearson Correlation Coefficient is", round(pearson_coef, 3), " with a P-value of P =", round(p_value, 4), '\n')
+
+
 
 # Print the final dataframe.
 #print(df)
