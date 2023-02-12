@@ -4,6 +4,7 @@ import matplotlib.ticker as mtick
 import numpy as np
 from tabulate import tabulate
 import seaborn as sns
+from scipy import stats
 
 
 def create_bar_chart(df, n, title, value_column):
@@ -49,7 +50,7 @@ df.rename(columns={df.columns[0]: "Country"}, inplace= True)
 duplicate_rows = df.duplicated()
 print(f"This data contains {duplicate_rows.sum()} duplicated rows.\n")
 
-print("Checking how many rows are   there in the dataset?")
+print("Checking how many rows are there in the dataset?")
 #print(len(df), '\n')
 
 print("\n Find the missing values for all columns. \n")
@@ -89,6 +90,7 @@ df[cols] = df[cols].apply(lambda x: x.str.replace(',', '.')).astype(float)
 print("Count growth of all countries from 1990 to 2021 \n")
 #fullfill empty series in column 1990 with .bfill() method, which fills missing values with the next non-null value in the column
 df = df.bfill( axis= 1)
+df = df.ffill( axis= 1)
 
 #print(tabulate(df, headers='keys'))
 #add column with growth from 1990 to 20221
@@ -96,26 +98,27 @@ df['2021'] = df['2021'].astype(float)
 df['1990'] = df['1990'].astype(float)
 df['Growth'] = round(df["2021"]/df["1990"] - 1, 2)
 
-# Sort values of the dataframe based on column 'Growth' in descending order
-top_10 = df.sort_values(by='Growth', ascending=False, inplace=True)
-print(top_10)
-
 # Print 5 random rows from the sorted dataframe
 #print(df.sample(5))
 
-
 #plot a bar chrt for top 10 exonomies:
 #create_bar_chart(df=df, n=31, title="Top 10 best growing countries", value_column="Growth")
+
+# float_format is set to a function that formats floating point numbers with a comma as a thousands separator,
+# and with no decimal places to read more comfortable data
+pd.options.display.float_format = '{:,.2f}'.format
 
 # Load the 'area.csv' file and skip first 4 rows
 file_area = "area.csv"
 df_area = pd.read_csv(file_area, skiprows=4, encoding='UTF-8')
 
-# Print the loaded dataframe
-#print(df_area)
+# Print the loaded dataframe to check Are df
+#print("Print the area df:\n", df_area)
+
 
 # Rename the column '2020' to 'Area' in the dataframe 'df_area'
 df_area.rename(columns={"2020" : "Area"}, inplace=True)
+
 # Print the modified dataframe
 #print(df_area)
 
@@ -130,6 +133,7 @@ df = df.merge(df_area[["Country Code", 'Area']], on='Country Code', how='left')
 # Change ',' to '.' to convert column "Area" to float to perform mathematical operations on it
 df['Area'] = df['Area'].astype(str).str.replace(',', '.').astype(float)
 
+
 # Check if column type has changed
 #print(df['Area'].dtypes)
 
@@ -141,9 +145,17 @@ plt.ylim(0,)
 # Check correlation between Growth of country and its size
 print(df[["Growth", "Area"]].corr())
 
+#Let's calculate the Pearson Correlation Coefficient and P-value of Growth and Area to know the significant of the correlation estimate:
+df_clean= df.dropna(subset=['Area']) # removing countries with nan value in Area column
+
+#print(tabulate(df_clean, headers="keys"))
+pearson_coef, p_value = stats.pearsonr(df_clean['Area'], df_clean['Growth'])
+print("\nThe Pearson Correlation Coefficient is", round(pearson_coef, 3), " with a P-value of P =", round(p_value, 4))
+
 '''
-Conclusion: The regression analysis suggests that the area of a country is not a strong predictor of its growth. The regression line is close to horizontal, indicating a weak relationship between the two variables. Additionally, the data points are widely dispersed and far from the fitted line, demonstrating a high degree of variability. These findings suggest that area is not a reliable variable for predicting growth.
-It is worth noting that while the relationship between area and growth may be weak overall, there may be exceptions in specific countries. For instance, large countries such as Russia, Brazil, and China are relatively poor, while other large countries such as Canada, the United States, and Australia are wealthy. This highlights the complexity of the relationship between area and growth and the need for further examination to better understand it.
+Based on the code, the Pearson Correlation Coefficient between the Growth and Area columns is 0.055. 
+The P-value, which is the probability of observing a correlation as strong as the one computed from
+the sample, is 0.3995074419116786. Given the P-value is greater than 0.05, we can conclude that there is no statistically significant correlation between Growth and Area.
 '''
 
 # Check corelation between population size and economic growth
@@ -152,10 +164,6 @@ df_population = pd.read_csv("population.csv", encoding='UTF-8')
 # checking an average size of population for every country from 1990 to 2021 year and adding
 # it to new created column called population
 df_population["Population"] = df_population.iloc[:, 34:65].mean(axis=1)
-
-# float_format is set to a function that formats floating point numbers with a comma as a thousands separator,
-# and with no decimal places to read more comfortable data
-pd.options.display.float_format = '{:,.2f}'.format
 
 # with the type of merge being 'left'
 df = df.merge(df_population[["Country Code", 'Population']], on='Country Code', how='left')
