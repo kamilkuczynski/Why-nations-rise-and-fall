@@ -42,7 +42,7 @@ def create_bar_chart(df, n, title, value_column):
     plt.show()
 
 
-file_name = "C:/Users/kuczy/Documents/GitHub/Why-nations-rise-and-fall/gdp_per_capita_ppp_constant_2017.csv"
+file_name = "C:/Users/kuczy/Documents/GitHub/Why-nations-rise-and-fall/3.0 gdp_per_capita_ppp_constant_2017.csv"
 
 df = pd.read_csv(file_name)
 
@@ -117,7 +117,7 @@ df['Growth'] = round(df["2021"]/df["1990"] - 1, 2)
 pd.options.display.float_format = '{:,.2f}'.format
 
 print("\nLoad the 'area.csv' file and skip first 4 rows")
-file_area = "area.csv"
+file_area = "3.0 area.csv"
 df_area = pd.read_csv(file_area, skiprows=4, encoding='UTF-8')
 
 # Print the loaded dataframe to check Are df
@@ -166,7 +166,7 @@ Given the P-value is greater than 0.05, we can conclude that there is no statist
 '''
 
 # Check corelation between population size and economic growth
-df_population = pd.read_csv("population.csv", encoding='UTF-8')
+df_population = pd.read_csv("3.0 population.csv", encoding='UTF-8')
 
 # checking an average size of population for every country from 1990 to 2021 year and adding
 # it to new created column called population
@@ -207,7 +207,7 @@ For example, in countries such as India, Brazil, Egypt, and China, despite havin
 # Load the data into a pandas DataFrame and calculate the mean of the 'Summary Index' column for each country in one line
 
 # Import the data from the csv file into a pandas dataframe
-df_economy_freedom = pd.read_csv("economicdata1990-2020.csv")
+df_economy_freedom = pd.read_csv("3.0 economicdata1990-2020.csv")
 
 # Convert the "Economic Freedom Summary Index" column to a numerical type by first removing the commas and then converting to a float.
 df_economy_freedom['Economic Freedom Summary Index'] = df_economy_freedom['Economic Freedom Summary Index'].str.replace(',', '.')
@@ -266,4 +266,4 @@ plt.show()
 print(tabulate(df.head(), headers="keys"))
 
 #save df to csv
-df.to_csv("gdp_per_capita_ppp_constant_2017_modified.csv", index=False)
+df.to_csv("3.1 gdp_per_capita_ppp_constant_2017_modified.csv", index=False)

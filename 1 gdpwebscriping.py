@@ -21,4 +21,4 @@ for i, table in enumerate(tables):
     print(f"Table {i + 1} has {df.isnull().sum()} missing values")
     missing_values_by_country = df.isnull().sum(axis=1).groupby(df['Country']).sum()
     print(missing_values_by_country)
-    df.to_csv(f'gdp_per_capita_{i}.csv', index=True, quoting=csv.QUOTE_NONNUMERIC)
+    df.to_csv(f'1.{i} gdp_per_capita_{i}.csv', index=True, quoting=csv.QUOTE_NONNUMERIC)
