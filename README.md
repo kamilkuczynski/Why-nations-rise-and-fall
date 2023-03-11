@@ -3,7 +3,7 @@ This project aims to analyze the GDP per capita PPP (Purchasing Power Parity) of
 
 The findings of this project will be useful for policymakers, researchers, and other stakeholders in the field of economics and development.
 
-The project starts by scraping data from Wikipedia, and merges the output into a table of all countries what you will find in this file: https://shorturl.gg/5z5lj.
+The project starts by scraping data from Wikipedia, and merges the output into a table of all countries what you will find in this file: http://bit.ly/3yxmaAi.
 
 The project is implemented in Python, using libraries such as pandas, numpy, matplotlib, and seaborn for data cleaning, preprocessing, visualization, and modeling: https://shorturl.gg/Sx7XT.
 
