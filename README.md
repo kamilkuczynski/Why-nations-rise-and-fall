@@ -5,9 +5,9 @@ The findings of this project will be useful for policymakers, researchers, and o
 
 The project starts by scraping data from Wikipedia, and merges the output into a table of all countries what you will find in this file: http://bit.ly/3yxmaAi.
 
-The project is implemented in Python, using libraries such as pandas, numpy, matplotlib, and seaborn for data cleaning, preprocessing, visualization, and modeling: https://shorturl.gg/Sx7XT.
+The project is implemented in Python, using libraries such as pandas, numpy, matplotlib, and seaborn for data cleaning, preprocessing, visualization, and modeling: http://bit.ly/3T5cPcx.
 
-The project also utilizes statistical methods to identify patterns and trends in the data, and uses IBM Cognos for data manipulation and visualization. All findings are documented in the report: https://shorturl.gg/WPmPr2I.
+The project also utilizes statistical methods to identify patterns and trends in the data, and uses IBM Cognos for data manipulation and visualization. All findings are documented in the report: http://bit.ly/4017OnM.
 
 This project is developed on GitHub and is open-source, allowing for collaboration and contributions from other data analysts and developers.
 
