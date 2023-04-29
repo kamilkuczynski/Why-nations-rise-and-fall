@@ -1,4 +1,4 @@
-# Why-nations-rise-and-fall
+# Why nations rise and fall?
 This project aims to analyze the GDP per capita PPP (Purchasing Power Parity) of countries in order to identify patterns and trends in the data. The main focus of the analysis will be to study the correlation between growing and declining GDP per capita PPP in approximately 186 countries.
 
 The findings of this project will be useful for policymakers, researchers, and other stakeholders in the field of economics and development.
